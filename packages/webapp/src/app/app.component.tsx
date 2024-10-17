@@ -27,6 +27,7 @@ import {
 import { IntlProvider } from 'react-intl';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
+import TdeApp from '@sb/webapp-tde/src/taskpane/components/TdeApp';
 import { Role } from '../modules/auth/auth.types';
 import { Admin } from '../routes/admin';
 import { PasswordReset } from '../routes/auth/passwordReset';
@@ -84,6 +85,7 @@ export const App = () => {
 
           <Route element={<AuthRoute />}>
             <Route path={RoutesConfig.profile} element={<Profile />} />
+            <Route path={RoutesConfig.tde} element={<TdeApp />} />
             <Route path={RoutesConfig.addTenant} element={<AddTenantForm />} />
             <Route path={RoutesConfig.tenantInvitation} element={<TenantInvitation />} />
             <Route path="*" element={<NotFound />} />

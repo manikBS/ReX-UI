@@ -1,23 +1,36 @@
 {
-  "name": "@sb/webapp-tde",
+  "name": "office-addin-taskpane-react",
   "version": "0.0.1",
-  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manikBS/ReX.git"
+  },
+  "license": "MIT",
+  "config": {
+    "dev_server_port": 3000
+  },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "lint": "eslint .",
-    "type-check": "tsc --noEmit --project tsconfig.lib.json"
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "start": "webpack serve --mode production",
+    "lint": "office-addin-lint check",
+    "lint:fix": "office-addin-lint fix",
+    "prettier": "office-addin-lint prettier",
+    "starty": "office-addin-debugging start manifest.xml",
+    "start:desktop": "office-addin-debugging start manifest.xml desktop",
+    "start:web": "office-addin-debugging start manifest.xml web",
+    "stop": "office-addin-debugging stop manifest.xml",
+    "validate": "office-addin-manifest validate manifest.xml",
+    "watch": "webpack --mode development --watch"
   },
   "dependencies": {
-    "@sb/webapp-api-client": "workspace:*",
-    "@sb/webapp-core": "workspace:*",
     "@auth0/auth0-react": "^2.2.4",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fluentui/react": "^8.110.11",
     "@microsoft/office-js-helpers": "^1.0.2",
     "@mui/icons-material": "^5.14.3",
-    "@mui/lab": "5.0.0-alpha.138",
+    "@mui/lab": "^5.0.0-alpha.138",
     "@mui/material": "^5.14.3",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/wicg-file-system-access": "^2020.9.6",
@@ -31,9 +44,7 @@
     "react-router-dom": "^6.14.2",
     "redux": "^4.2.1",
     "regenerator-runtime": "^0.13.7",
-    "underscore": "^1.13.6",
-    "fuse.js": "^7.0.0",
-    "uuid": "^10.0.0"
+    "underscore": "^1.13.6"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
@@ -67,6 +78,13 @@
     "source-map-loader": "^3.0.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.4.1",
-    "typescript": "^4.3.5"
-  }
+    "typescript": "^4.3.5",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "4.13.1"
+  },
+  "prettier": "office-addin-prettier-config",
+  "browserslist": [
+    "ie 11"
+  ]
 }
