@@ -1,7 +1,8 @@
 import dns from 'dns';
 import { join } from 'path';
+import fs from 'fs';
 
-import * as devCerts from 'office-addin-dev-certs';
+import officeAddin from 'vite-plugin-office-addin'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react';
@@ -11,15 +12,15 @@ import svgr from 'vite-plugin-svgr';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 dns.setDefaultResultOrder('verbatim');
+const devCerts = require("office-addin-dev-certs");
 
-function getHttpsOptions() {
-  const httpsOptions = devCerts.getHttpsServerOptions();
+async function getHttpsOptions() {
+  const httpsOptions = await devCerts.getHttpsServerOptions();
   return { ca: httpsOptions.ca, key: httpsOptions.key, cert: httpsOptions.cert };
 }
 
-export default defineConfig(({ mode }): UserConfig => {
+export default defineConfig(async ({ mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd());
-  const ssl = getHttpsOptions(); 
 
   // expose .env as process.env instead of import.meta since jest does not import meta yet
   const envWithProcessPrefix = Object.entries(env).reduce((prev, [key, val]) => {
@@ -34,11 +35,10 @@ export default defineConfig(({ mode }): UserConfig => {
 
     server: {
       https: {
-        key: ssl.key,
-        cert: ssl.cert,
+        key: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/localhost.key'),
+        cert: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/localhost.crt'),
       },
       port: 3000,
-      host: 'localhost',
       open: true,
       proxy: {
         '/api': {
@@ -68,6 +68,10 @@ export default defineConfig(({ mode }): UserConfig => {
 
     plugins: [
       legacy(),
+      officeAddin({
+        devUrl: 'https://localhost:3000',
+        prodUrl: 'https://office-addin.contoso.com'
+      }),
       react(),
       viteTsConfigPaths({
         projects: ['../../tsconfig.base.json'],
@@ -77,7 +81,7 @@ export default defineConfig(({ mode }): UserConfig => {
         include: ['**/*.svg', '**/*.svg?react'],
         exclude: [],
       }),
-      viteCommonjs()
+      viteCommonjs(),
     ],
 
     build: {

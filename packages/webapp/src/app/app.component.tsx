@@ -85,7 +85,6 @@ export const App = () => {
 
           <Route element={<AuthRoute />}>
             <Route path={RoutesConfig.profile} element={<Profile />} />
-            <Route path={RoutesConfig.tde} element={<TdeApp />} />
             <Route path={RoutesConfig.addTenant} element={<AddTenantForm />} />
             <Route path={RoutesConfig.tenantInvitation} element={<TenantInvitation />} />
             <Route path="*" element={<NotFound />} />
@@ -95,7 +94,7 @@ export const App = () => {
             <Route path={RoutesConfig.admin} element={<Admin />} />
           </Route>
 
-
+          <Route path={RoutesConfig.tde} element={<TdeApp />} />
           <Route path={RoutesConfig.confirmEmail} element={<ConfirmEmail />} />
           <Route path={RoutesConfig.privacyPolicy} element={<PrivacyPolicy />} />
           <Route path={RoutesConfig.termsAndConditions} element={<TermsAndConditions />} />
