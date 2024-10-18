@@ -49,6 +49,7 @@ export const App = () => {
           <Route element={<AnonymousRoute />}>
             <Route path={RoutesConfig.signup} element={<Signup />} />
             <Route path={RoutesConfig.login} element={<Login />} />
+            <Route path={RoutesConfig.tde} element={<TdeApp />} />
             <Route path={RoutesConfig.validateOtp} element={<ValidateOtp />} />
             <Route path="*" element={<NotFound />} />
           </Route>
@@ -94,7 +95,6 @@ export const App = () => {
             <Route path={RoutesConfig.admin} element={<Admin />} />
           </Route>
 
-          <Route path={RoutesConfig.tde} element={<TdeApp />} />
           <Route path={RoutesConfig.confirmEmail} element={<ConfirmEmail />} />
           <Route path={RoutesConfig.privacyPolicy} element={<PrivacyPolicy />} />
           <Route path={RoutesConfig.termsAndConditions} element={<TermsAndConditions />} />

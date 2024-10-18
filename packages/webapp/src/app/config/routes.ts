@@ -29,4 +29,9 @@ export const NO_NAVIGATION_ROUTES = [
   RoutesConfig.confirmEmail,
   RoutesConfig.passwordReset.index,
   RoutesConfig.passwordReset.confirm,
+  RoutesConfig.tde,
+].map(getLocalePath);
+
+export const NO_HEADER_ROUTES = [
+  RoutesConfig.tde,
 ].map(getLocalePath);
