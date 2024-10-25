@@ -35,6 +35,7 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 
     server: {
       https: {
+        ca: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/ca.crt'),
         key: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/localhost.key'),
         cert: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/localhost.crt'),
       },

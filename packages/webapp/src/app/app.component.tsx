@@ -49,13 +49,13 @@ export const App = () => {
           <Route element={<AnonymousRoute />}>
             <Route path={RoutesConfig.signup} element={<Signup />} />
             <Route path={RoutesConfig.login} element={<Login />} />
-            <Route path={RoutesConfig.tde} element={<TdeApp />} />
             <Route path={RoutesConfig.validateOtp} element={<ValidateOtp />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 
           <Route path={TENANT_PREFIX} element={<AuthRoute />}>
             <Route index element={<Home />} />
+            <Route path={RoutesConfig.tde} element={<TdeApp />} />
             <Route element={<TenantAuthRoute allowedRoles={[TenantUserRole.ADMIN, TenantUserRole.OWNER]} />}>
               <Route element={<TenantSettings />}>
                 <Route path={RoutesConfig.tenant.settings.members} element={<TenantMembers />} />
