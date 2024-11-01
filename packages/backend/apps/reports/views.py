@@ -1,11 +1,12 @@
 import logging
 import mimetypes
+import requests
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.decorators import action
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import ReportTemplate, ReportRun, Tenant
 from .serializers import ReportTemplateSerializer, ReportRunSerializer
 from .tasks import run_report_task
@@ -48,27 +49,11 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
             tenant=tenant_instance
         )
         return Response({"template_id": template.id}, status=status.HTTP_201_CREATED)
-
+    
     @action(detail=True, methods=['post'])
     def run(self, request, pk=None):
-        """Trigger the report generation task for this template or upload a file to run"""
-        template_id = request.data.get('template_id')
-        file = request.FILES.get('file')
-
-        if template_id:
-            template = ReportTemplate.objects.get(id=template_id)
-        elif file:
-            template_data = file.read()
-            tenant = request.data.get('tenant')
-            tenant_instance = Tenant.objects.get(id=tenant)
-            template = ReportTemplate.objects.create(
-                name="Temporary Template",
-                file=template_data,
-                created_by=request.user,
-                tenant=tenant_instance
-            )
-        else:
-            return Response({"error": "Either template_id or file is required"}, status=status.HTTP_400_BAD_REQUEST)
+        template = ReportTemplate.objects.get(id=pk)
+        json_file = request.FILES.get('json_file')
 
         report_run = ReportRun.objects.create(
             template=template,
@@ -76,8 +61,56 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
             status='started',
             tenant=template.tenant
         )
-        run_report_task.delay(report_run.id)
-        return Response({"status": "Report generation started"}, status=status.HTTP_202_ACCEPTED)
+        #run_report_task.delay(report_run.id)
+        api_url = "http://172.19.0.2:80/ReportBuilder/generate"
+        output_filename = f"{template.name}_output"
+
+        # Prepare files as tuples (name, file, MIME type)
+        office_file = (template.name, template.file, template.file_type)
+        data_file = (json_file.name, json_file, 'application/json')
+
+        # Call the utility function
+        return self.call_report_generation_api(api_url, office_file, data_file, output_filename)
+    
+    def call_report_generation_api(self, api_url, office_file, data_file, output_filename):
+        """
+        Calls the external API to generate a report and returns the API response.
+
+        :param api_url: URL of the external API.
+        :param office_file: Tuple containing the office file's name, file object, and MIME type.
+        :param data_file: Tuple containing the JSON file's name, file object, and MIME type.
+        :param output_filename: Name for the output file in the response.
+        :return: HttpResponse or JsonResponse containing the generated report or error.
+        """
+        files = {
+            'officeFile': office_file,
+            'dataFile': data_file
+        }
+        
+        params = {
+            'isPdfConversion': 'false',
+            'outputFileName': output_filename
+        }
+
+        try:
+            response = requests.post(api_url, files=files, params=params, verify=False)  # `verify=False` for self-signed SSL
+            response.raise_for_status()
+
+            # Process the file returned from the external API
+            content_disposition = response.headers.get('content-disposition')
+            if content_disposition:
+                filename = content_disposition.split('filename=')[-1].strip().split(';')[0].strip('"')
+                return HttpResponse(
+                    response.content,
+                    content_type=response.headers['content-type'],
+                    headers={'Content-Disposition': f'attachment; filename="{filename}"'}
+                )
+            else:
+                return JsonResponse(response.json(), status=response.status_code)
+
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({"error": "An error occurred while generating the report.", "details": str(e)}, status=500)
+
 
 class ReportRunViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ReportRun.objects.all()
