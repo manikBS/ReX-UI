@@ -72,6 +72,32 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
         # Call the utility function
         return self.call_report_generation_api(api_url, office_file, data_file, output_filename)
     
+    @action(detail=False, methods=['post'], url_path='run')
+    def run_with_file(self, request):
+        """
+        Custom action to generate a report by directly providing a JSON file and office file.
+        """
+        office_file = request.FILES.get('office_file')
+        json_file = request.FILES.get('json_file')
+
+        # Check if files are provided
+        if not office_file or not json_file:
+            return Response(
+                {"error": "Both office file and JSON file are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Define the external API URL
+        api_url = "http://172.19.0.2:80/ReportBuilder/generate"
+        output_filename = office_file.name.split('.')[0] + "_output"
+
+        # Prepare files as tuples (name, file, MIME type)
+        office_file_tuple = (office_file.name, office_file, office_file.content_type)
+        json_file_tuple = (json_file.name, json_file, 'application/json')
+
+        # Call the utility function
+        return self.call_report_generation_api(api_url, office_file_tuple, json_file_tuple, output_filename)
+
     def call_report_generation_api(self, api_url, office_file, data_file, output_filename):
         """
         Calls the external API to generate a report and returns the API response.
