@@ -208,7 +208,7 @@ export const Sidebar = (props: HTMLAttributes<HTMLDivElement>) => {
             </nav>
             <Alert variant="info">
               <AlertTitle className="text-sm">
-                SaaS Boilerplate by{' '}
+                ReX {' '}
                 <a href="https://apptension.com" target="_blank" rel="noreferrer">
                   Apptension
                 </a>
@@ -217,7 +217,7 @@ export const Sidebar = (props: HTMLAttributes<HTMLDivElement>) => {
                 <a
                   target="_blank"
                   className="underline"
-                  href="https://github.com/apptension/saas-boilerplate"
+                  href="https://github.com/mankBS/ReX"
                   rel="noreferrer"
                 >
                   GitHub repository

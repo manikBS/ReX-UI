@@ -1,6 +1,8 @@
 import dns from 'dns';
 import { join } from 'path';
+import fs from 'fs';
 
+import officeAddin from 'vite-plugin-office-addin'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react';
@@ -10,8 +12,14 @@ import svgr from 'vite-plugin-svgr';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 dns.setDefaultResultOrder('verbatim');
+const devCerts = require("office-addin-dev-certs");
 
-export default defineConfig(({ mode }): UserConfig => {
+async function getHttpsOptions() {
+  const httpsOptions = await devCerts.getHttpsServerOptions();
+  return { ca: httpsOptions.ca, key: httpsOptions.key, cert: httpsOptions.cert };
+}
+
+export default defineConfig(async ({ mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd());
 
   // expose .env as process.env instead of import.meta since jest does not import meta yet
@@ -26,8 +34,12 @@ export default defineConfig(({ mode }): UserConfig => {
     cacheDir: '../../node_modules/.vite/webapp',
 
     server: {
+      https: {
+        ca: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/ca.crt'),
+        key: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/localhost.key'),
+        cert: fs.readFileSync('/home/manikbs/.office-addin-dev-certs/localhost.crt'),
+      },
       port: 3000,
-      host: 'localhost',
       open: true,
       proxy: {
         '/api': {
@@ -57,6 +69,10 @@ export default defineConfig(({ mode }): UserConfig => {
 
     plugins: [
       legacy(),
+      officeAddin({
+        devUrl: 'https://localhost:3000',
+        prodUrl: 'https://office-addin.contoso.com'
+      }),
       react(),
       viteTsConfigPaths({
         projects: ['../../tsconfig.base.json'],

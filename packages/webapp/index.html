@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="h-full">
   <head>
     <meta charset="utf-8" />
@@ -19,7 +19,31 @@
     homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="/manifest.json" />
-    <title>Apptension Boilerplate</title>
+
+    <script>
+      window.backupHistoryFunctions = {};
+      window.backupHistoryFunctions.pushState = window.history.pushState;
+      window.backupHistoryFunctions.replaceState = window.history.replaceState;
+    </script>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+
+    <script type="text/javascript">
+      // Office js deletes window.history.pushState and window.history.replaceState. Restore them
+      window.history.replaceState = window.backupHistoryFunctions.replaceState;
+      window.history.pushState = window.backupHistoryFunctions.pushState;
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"
+    />
+
+    <!-- Template styles -->
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+
+    <title>ReX</title>
   </head>
   <body class="h-full">
     <!-- Display a message if JS has been disabled on the browser. -->
@@ -32,7 +56,7 @@
       <h1 />
     </div>
 
-    <div id="root" class="min-h-full"></div>
+    <div id="root" class="ms-font-m ms-Fabric min-h-full"></div>
     <script>
       window.global = window;
     </script>

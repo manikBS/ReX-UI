@@ -68,7 +68,8 @@
       "@sb/webapp-tenants": [
         "packages/webapp-libs/webapp-tenants/src/index.ts"
       ],
-      "@sb/webapp-tenants/*": ["packages/webapp-libs/webapp-tenants/src/*"]
+      "@sb/webapp-tenants/*": ["packages/webapp-libs/webapp-tenants/src/*"],
+      "@sb/webapp-tde": ["packages/webapp-libs/webapp-tde/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

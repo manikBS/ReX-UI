@@ -2,7 +2,7 @@ import { isNil } from 'ramda';
 import { ReactNode, useMemo, useState } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
 
-import { NO_NAVIGATION_ROUTES } from '../../../app/config/routes';
+import { NO_NAVIGATION_ROUTES, NO_HEADER_ROUTES } from '../../../app/config/routes';
 import { Header } from './header';
 import { LayoutContext } from './layout.context';
 import { Sidebar } from './sidebar';
@@ -20,6 +20,11 @@ export const Layout = ({ children }: LayoutProps) => {
     [pathname]
   );
 
+  const shouldDisplayHeader = useMemo(
+    () => NO_HEADER_ROUTES.every((path) => isNil(matchPath({ path }, pathname))),
+    [pathname]
+  );
+
   const value = useMemo(
     () => ({ isSidebarAvailable: shouldDisplaySidebar, isSideMenuOpen, setSideMenuOpen }),
     [shouldDisplaySidebar, isSideMenuOpen, setSideMenuOpen]
@@ -28,8 +33,8 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <LayoutContext.Provider value={value}>
       <div className={shouldDisplaySidebar ? 'lg:pl-72' : undefined}>
-        <Header />
-        <main className="py-10">{children}</main>
+        {shouldDisplayHeader && <Header />}
+        {children}
       </div>
       {shouldDisplaySidebar && <Sidebar />}
     </LayoutContext.Provider>

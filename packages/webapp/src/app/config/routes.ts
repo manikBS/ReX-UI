@@ -5,6 +5,7 @@ import { RoutesConfig as CrudDemoRoutesConfig } from '@sb/webapp-crud-demo/confi
 import { RoutesConfig as FinancesRoutesConfig } from '@sb/webapp-finances/config/routes';
 import { RoutesConfig as GenerativeAIRoutesConfig } from '@sb/webapp-generative-ai/config/routes';
 import { RoutesConfig as TenantsRoutesConfig } from '@sb/webapp-tenants/config/routes';
+import { RoutesConfig as TdeRoutesConfig } from '@sb/webapp-tde/src/config/routes';
 
 export const LANG_PREFIX = `/:lang?/*`;
 export const TENANT_PREFIX = `:tenantId?/*`;
@@ -17,7 +18,7 @@ export const RoutesConfig = {
   ...ContentfulRoutesConfig,
   ...CrudDemoRoutesConfig,
   ...FinancesRoutesConfig,
-  //<-- INJECT ROUTE DEFINITION -->
+  ...TdeRoutesConfig,
 };
 
 export const NO_NAVIGATION_ROUTES = [
@@ -28,4 +29,9 @@ export const NO_NAVIGATION_ROUTES = [
   RoutesConfig.confirmEmail,
   RoutesConfig.passwordReset.index,
   RoutesConfig.passwordReset.confirm,
+  RoutesConfig.tde,
+].map(getLocalePath);
+
+export const NO_HEADER_ROUTES = [
+  RoutesConfig.tde,
 ].map(getLocalePath);

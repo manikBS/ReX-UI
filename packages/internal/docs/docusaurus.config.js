@@ -19,8 +19,8 @@ if (process.env.GTM_CONTAINER_ID) {
   };
 }
 module.exports = {
-  title: 'SaaS Boilerplate by Apptension',
-  tagline: 'SaaS Boilerplate is not a boiler on a plate',
+  title: 'ReX',
+  tagline: 'Xtend Reporting Capabilities...',
   url: 'https://docs.demo.saas.apptoku.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -35,9 +35,9 @@ module.exports = {
       },
     },
     navbar: {
-      title: 'SaaS Boilerplate by Apptension',
+      title: 'ReX',
       logo: {
-        alt: 'SaaS Boilerplate by Apptension',
+        alt: 'ReX',
         src: 'img/logo.svg',
         srcDark: 'img/logoDark.svg',
       },
@@ -47,7 +47,7 @@ module.exports = {
           position: 'right',
         },
         {
-          label: 'SaaS Boilerplate website',
+          label: 'ReX website',
           href: 'https://apptension.com/saas-boilerplate?utm_source=docs&utm_medium=referral&utm_campaign=SaaS%20Boilerplate&utm_term=SaaS%20Boilerplate',
           position: 'right',
         },
