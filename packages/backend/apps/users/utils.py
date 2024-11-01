@@ -9,7 +9,7 @@ def set_auth_cookie(response, data):
     cookie_max_age = settings.COOKIE_MAX_AGE
     access = data.get(settings.ACCESS_TOKEN_COOKIE)
     refresh = data.get(settings.REFRESH_TOKEN_COOKIE)
-    response.set_cookie(settings.ACCESS_TOKEN_COOKIE, access, max_age=cookie_max_age, httponly=True)
+    response.set_cookie(settings.ACCESS_TOKEN_COOKIE, access, max_age=cookie_max_age, httponly=True, samesite="None", secure=True)
 
     if refresh:
         response.set_cookie(
@@ -17,7 +17,8 @@ def set_auth_cookie(response, data):
             refresh,
             max_age=cookie_max_age,
             httponly=True,
-            path=reverse("jwt_token_refresh"),
+            path=reverse("jwt_token_refresh"), 
+            samesite="None", secure=True
         )
 
         response.set_cookie(
@@ -26,6 +27,7 @@ def set_auth_cookie(response, data):
             max_age=cookie_max_age,
             httponly=True,
             path=reverse("logout"),
+            samesite="None", secure=True
         )
 
 
