@@ -38,18 +38,19 @@ const Footer: React.FC<IFooterProps> = () => {
     }
 
     const formData = new FormData();
-    formData.append('OfficeFile', currentOfficeFile);
-    formData.append('DataFile', currentDataFile);
+    formData.append('office_file', currentOfficeFile);
+    formData.append('json_file', currentDataFile);
     formData.append('IsPdfConversion', isPdfConversion.toString());
     formData.append('OutputFileName', outputFileName);
-    console.log(`Calling https://localhost:7069/ReportBuilder/generate?isPdfConversion=${isPdfConversion}&outputFileName=${outputFileName} ...`)
+    console.log(`Calling http://localhost:5001/api/reports/report-templates/run?isPdfConversion=${isPdfConversion}&outputFileName=${outputFileName} ...`)
     try {
-      const response = await fetch(`https://localhost:7069/ReportBuilder/generate?isPdfConversion=${isPdfConversion}&outputFileName=${outputFileName}`, {
+      const response = await fetch(`/api/reports/report-templates/run/`, {
         method: 'POST',
         body: formData,
         headers: {
           "access-control-allow-origin": "*",
-        }
+        },
+        credentials: 'include',
       });
 
       if (!response.ok) {

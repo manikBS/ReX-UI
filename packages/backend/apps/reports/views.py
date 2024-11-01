@@ -88,7 +88,7 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
             )
 
         # Define the external API URL
-        api_url = "http://172.19.0.2:80/ReportBuilder/generate"
+        api_url = "http://172.19.0.3:80/ReportBuilder/generate"
         output_filename = office_file.name.split('.')[0] + "_output"
 
         # Prepare files as tuples (name, file, MIME type)
