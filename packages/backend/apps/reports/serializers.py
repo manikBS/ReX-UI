@@ -8,7 +8,7 @@ from apps.multitenancy.models import Tenant
 logger = logging.getLogger(__name__)
 
 class ReportTemplateSerializer(serializers.ModelSerializer):
-    file = serializers.FileField(write_only=True)
+    file_upload = serializers.FileField(write_only=True)
     
     id = hidrest.HashidSerializerCharField(
         source_field="reports.ReportTemplate.id", read_only=True
@@ -20,21 +20,9 @@ class ReportTemplateSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    tenant = serializers.PrimaryKeyRelatedField(
-        queryset=Tenant.objects.all(),
-        pk_field=hidrest.HashidSerializerCharField(),
-        write_only=True,
-    )
-
     class Meta:
         model = ReportTemplate
-        fields = ['id', 'name', 'description', 'file', 'created_at', 'updated_at', 'created_by', 'tenant']
-
-    def create(self, validated_data):
-        file = validated_data.pop('file')
-        validated_data['file_type'] = file.content_type
-        validated_data['file'] = file.read()
-        return super().create(validated_data)
+        fields = ['id', 'name', 'description', 'file_upload', 'created_at', 'updated_at', 'created_by', 'tenant']
 
 class ReportRunSerializer(serializers.ModelSerializer):
     report_output = serializers.SerializerMethodField()

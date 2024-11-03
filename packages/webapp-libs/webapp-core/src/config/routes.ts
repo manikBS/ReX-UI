@@ -15,4 +15,5 @@ export const RoutesConfig = {
   }),
   addTenant: 'add-tenant',
   tenantInvitation: 'tenant-invitation/:token',
+  tde: 'tde',
 };

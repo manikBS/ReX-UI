@@ -28,7 +28,7 @@ const Footer: React.FC<IFooterProps> = () => {
   const [currentDataFile, setCurrentDataFile] = useState<File | null>(null);
   const [isPdfConversion, setIsPdfConversion] = useState(false);
   const [outputFileName, setOutputFileName] = useState("");
-  const [selectedTenant, setSelectedTenant] = useState(currentTenant ? currentTenant.id : "");
+  const [selectedTenant, setSelectedTenant] = useState(currentTenant ? currentTenant.name : "");
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [reportName, setReportName] = useState("");
   const [reportDescription, setReportDescription] = useState("");
@@ -103,27 +103,25 @@ const Footer: React.FC<IFooterProps> = () => {
   };
 
   const handleSaveAction = async () => {
-    if (!reportName || !selectedTenant) {
+    if (!reportName || !selectedTenant || !currentOfficeFile) {
       console.error('File, tenant, or output file name not provided.');
       return;
     }
-  
-    // Construct the payload
-    const payload = {
-      name: reportName,
-      description: reportDescription,
-      tenant: selectedTenant,
-    };
+
+    const formData = new FormData();
+    formData.append('file_upload', currentOfficeFile);
+    formData.append('name', reportName);
+    formData.append('description', reportDescription);
+    formData.append('tenant', selectedTenant);
   
     try {
       // Make the POST request to save the file information
       const response = await fetch('/api/reports/report-templates/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'accept': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: formData,
         credentials: 'include',
       });
   
@@ -227,12 +225,12 @@ const Footer: React.FC<IFooterProps> = () => {
             fullWidth
             >
               <MenuItem value="" disabled>Select Tenant</MenuItem>
-              {personalTenant && <MenuItem value={personalTenant.id}>{personalTenant.name}</MenuItem>}
+              {personalTenant && <MenuItem value={personalTenant.name}>{personalTenant.name}</MenuItem>}
               <ListSubheader>Organizations</ListSubheader>
               {organizationTenants.organizations
                 .filter((tenant) => tenant)
                 .map((tenant) => (
-                  <MenuItem value={tenant.id} key={tenant.id}>{tenant.name}</MenuItem>
+                  <MenuItem value={tenant.name} key={tenant.name}>{tenant.name}</MenuItem>
                 ))}
             </Select>
           </DialogContent>
@@ -266,12 +264,12 @@ const Footer: React.FC<IFooterProps> = () => {
             fullWidth
           >
             <MenuItem value="" disabled>Select Tenant</MenuItem>
-            {personalTenant && <MenuItem value={personalTenant.id}>{personalTenant.name}</MenuItem>}
+            {personalTenant && <MenuItem value={personalTenant.name}>{personalTenant.name}</MenuItem>}
             <ListSubheader>Organizations</ListSubheader>
             {organizationTenants.organizations
               .filter((tenant) => tenant)
               .map((tenant) => (
-                <MenuItem value={tenant.id} key={tenant.id}>{tenant.name}</MenuItem>
+                <MenuItem value={tenant.name} key={tenant.name}>{tenant.name}</MenuItem>
               ))}
           </Select>
         </DialogContent>
