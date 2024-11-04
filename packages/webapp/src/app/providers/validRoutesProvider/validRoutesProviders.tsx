@@ -38,7 +38,7 @@ export const ValidRoutesProviders = () => {
   return !language ? null : (
     <IntlProvider key={language} locale={language} messages={translationMessages[language]}>
       <>
-        <FormattedMessage defaultMessage="Apptension Boilerplate" id="App / Page title">
+        <FormattedMessage defaultMessage="ReX" id="App / Page title">
           {([pageTitle]: [string]) => <Helmet titleTemplate={`%s - ${pageTitle}`} defaultTitle={pageTitle} />}
         </FormattedMessage>
 

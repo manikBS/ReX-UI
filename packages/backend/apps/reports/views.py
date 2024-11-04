@@ -34,12 +34,13 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
         return response
     
     def create(self, request, *args, **kwargs):
-        template_data =  request.data.get('file')
-        template_type =  request.data.get('file_type')
+        file =  request.data.get('file_upload')
+        template_data = file.read()
+        template_type =  file.content_type
         logger.info(template_data)
         logger.info(request)
         tenant = request.data.get('tenant')
-        tenant_instance = Tenant.objects.get(id=tenant)
+        tenant_instance = Tenant.objects.get(name=tenant)
         template = ReportTemplate.objects.create(
             name=request.data.get('name'),
             description=request.data.get('description'),
@@ -48,7 +49,7 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
             created_by=request.user,
             tenant=tenant_instance
         )
-        return Response({"template_id": template.id}, status=status.HTTP_201_CREATED)
+        return Response({"template_id": str(template.id)}, status=status.HTTP_201_CREATED)
     
     @action(detail=True, methods=['post'])
     def run(self, request, pk=None):
@@ -88,7 +89,7 @@ class ReportTemplateViewSet(viewsets.ModelViewSet):
             )
 
         # Define the external API URL
-        api_url = "http://172.19.0.2:80/ReportBuilder/generate"
+        api_url = "http://172.19.0.3:80/ReportBuilder/generate"
         output_filename = office_file.name.split('.')[0] + "_output"
 
         # Prepare files as tuples (name, file, MIME type)
