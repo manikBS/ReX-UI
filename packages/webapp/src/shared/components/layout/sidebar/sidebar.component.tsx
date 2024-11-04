@@ -209,8 +209,8 @@ export const Sidebar = (props: HTMLAttributes<HTMLDivElement>) => {
             <Alert variant="info">
               <AlertTitle className="text-sm">
                 ReX {' '}
-                <a href="https://apptension.com" target="_blank" rel="noreferrer">
-                  Apptension
+                <a href="https://github.com/manikBS/ReX" target="_blank" rel="noreferrer">
+                  ReX
                 </a>
               </AlertTitle>
               <AlertDescription>

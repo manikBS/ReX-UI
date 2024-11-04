@@ -20,6 +20,12 @@ class ReportTemplateSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
+    tenant = serializers.PrimaryKeyRelatedField(
+        queryset=Tenant.objects.all(),
+        pk_field=hidrest.HashidSerializerCharField(),
+        write_only=True,
+    )
+
     class Meta:
         model = ReportTemplate
         fields = ['id', 'name', 'description', 'file_upload', 'created_at', 'updated_at', 'created_by', 'tenant']

@@ -65,6 +65,8 @@
     "stylelint": "^16.6.0",
     "stylelint-config-standard": "^36.0.0",
     "vite-plugin-office-addin": "^1.0.0",
-    "office-addin-dev-certs": "^1.11.3"
+    "office-addin-dev-certs": "^1.11.3",
+    "@radix-ui/react-button": "^1.0.0",
+    "@radix-ui/react-card": "^1.0.0"
   }
 }
